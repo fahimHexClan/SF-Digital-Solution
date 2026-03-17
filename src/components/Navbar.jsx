@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react'
 import { Link, useLocation } from 'react-router-dom'
 import { AnimatePresence, motion } from 'framer-motion'
+import SFLogo from '../assets/SF Logo.png'
 
 const navLinks = [
   { label: 'Home', path: '/' },
@@ -13,6 +14,7 @@ const navLinks = [
 export default function Navbar() {
   const [menuOpen, setMenuOpen] = useState(false)
   const [scrolled, setScrolled] = useState(false)
+  const [glitching, setGlitching] = useState(false)
   const location = useLocation()
 
   useEffect(() => { setMenuOpen(false) }, [location.pathname])
@@ -23,30 +25,59 @@ export default function Navbar() {
     return () => window.removeEventListener('scroll', handleScroll)
   }, [])
 
+  /* Logo glitch on mount */
+  useEffect(() => {
+    const t1 = setTimeout(() => setGlitching(true), 400)
+    const t2 = setTimeout(() => setGlitching(false), 1800)
+    return () => { clearTimeout(t1); clearTimeout(t2) }
+  }, [])
+
   return (
     <>
       <nav style={{
         position: 'fixed', top: 0, left: 0, right: 0, zIndex: 1000,
-        background: 'rgba(255,255,255,0.98)',
-        borderBottom: '1px solid rgba(37,99,235,0.08)',
-        boxShadow: scrolled ? '0 2px 20px rgba(37,99,235,0.08)' : 'none',
+        background: 'rgba(7,16,32,0.92)',
+        backdropFilter: 'blur(20px)',
+        WebkitBackdropFilter: 'blur(20px)',
+        borderBottom: '1px solid rgba(30,111,255,0.12)',
+        boxShadow: scrolled ? '0 4px 30px rgba(30,111,255,0.08), 0 0 60px rgba(30,111,255,0.03)' : 'none',
         padding: '0 48px',
         display: 'flex', alignItems: 'center', justifyContent: 'space-between',
         height: '64px',
         transition: 'box-shadow 0.3s ease',
       }}>
         {/* Left: Logo */}
-        <Link to="/" style={{ textDecoration: 'none', display: 'flex', alignItems: 'center', gap: '12px' }}>
-          <div style={{
-            width: '32px', height: '32px', background: '#2563eb',
-            display: 'flex', alignItems: 'center', justifyContent: 'center',
-            flexShrink: 0,
-          }}>
-            <span style={{ color: '#ffffff', fontFamily: 'Bebas Neue, sans-serif', fontSize: '17px', letterSpacing: '1px' }}>SF</span>
-          </div>
+        <Link to="/" style={{ textDecoration: 'none', display: 'flex', alignItems: 'center', gap: '10px' }}>
+          <img
+            src={SFLogo}
+            alt="SF Digital Solutions Logo"
+            style={{
+              width: '48px',
+              height: '48px',
+              objectFit: 'contain',
+              filter: 'drop-shadow(0 0 8px rgba(30,111,255,0.5))',
+              transition: 'filter 0.3s ease',
+            }}
+            onMouseEnter={e => e.target.style.filter = 'drop-shadow(0 0 16px rgba(77,159,255,0.8))'}
+            onMouseLeave={e => e.target.style.filter = 'drop-shadow(0 0 8px rgba(30,111,255,0.5))'}
+          />
           <div>
-            <div style={{ fontFamily: 'Bebas Neue, sans-serif', fontSize: '14px', color: '#0a0f2e', letterSpacing: '3px', lineHeight: 1 }}>Digital Solutions</div>
-            <div style={{ fontFamily: 'Space Mono, monospace', fontSize: '9px', color: '#9ca3af', letterSpacing: '2px', marginTop: '2px' }}>Sri Lanka</div>
+            <div style={{
+              fontFamily: 'Orbitron, sans-serif',
+              fontSize: '12px',
+              fontWeight: 700,
+              color: '#e8f4ff',
+              letterSpacing: '3px',
+              lineHeight: 1,
+            }}>DIGITAL SOLUTIONS</div>
+            <div style={{
+              fontFamily: 'Rajdhani, sans-serif',
+              fontSize: '10px',
+              fontWeight: 600,
+              color: 'rgba(30,111,255,0.6)',
+              letterSpacing: '4px',
+              marginTop: '2px',
+            }}>SRI LANKA</div>
           </div>
         </Link>
 
@@ -56,15 +87,16 @@ export default function Navbar() {
             const isActive = location.pathname === link.path
             return (
               <Link key={link.path} to={link.path} style={{
-                fontFamily: 'Space Mono, monospace', fontSize: '10px',
+                fontFamily: 'Rajdhani, sans-serif', fontSize: '12px', fontWeight: 600,
                 letterSpacing: '3px', textTransform: 'uppercase',
-                color: isActive ? '#2563eb' : '#4b5563',
-                textDecoration: 'none', transition: 'color 0.2s ease',
-                borderBottom: isActive ? '2px solid #2563eb' : '2px solid transparent',
+                color: isActive ? '#4d9fff' : 'rgba(107,159,212,0.7)',
+                textDecoration: 'none', transition: 'color 0.2s ease, text-shadow 0.2s ease',
+                borderBottom: isActive ? '1px solid rgba(77,159,255,0.5)' : '1px solid transparent',
                 paddingBottom: '2px',
+                textShadow: isActive ? '0 0 12px rgba(77,159,255,0.6)' : 'none',
               }}
-                onMouseEnter={e => { if (!isActive) e.target.style.color = '#2563eb' }}
-                onMouseLeave={e => { if (!isActive) e.target.style.color = '#4b5563' }}
+                onMouseEnter={e => { if (!isActive) { e.target.style.color = '#4d9fff'; e.target.style.textShadow = '0 0 10px rgba(77,159,255,0.5)' } }}
+                onMouseLeave={e => { if (!isActive) { e.target.style.color = 'rgba(107,159,212,0.7)'; e.target.style.textShadow = 'none' } }}
               >{link.label}</Link>
             )
           })}
@@ -72,7 +104,7 @@ export default function Navbar() {
 
         {/* Right: CTA + burger */}
         <div style={{ display: 'flex', alignItems: 'center', gap: '16px' }}>
-          <Link to="/contact" className="btn-primary-glass hidden md:inline-flex" style={{ fontSize: '10px', padding: '10px 24px' }}>
+          <Link to="/contact" className="btn-primary-glass hidden md:inline-flex" style={{ fontSize: '11px', padding: '10px 24px', minHeight: '40px' }}>
             Get Started
           </Link>
           {/* Mobile burger */}
@@ -80,14 +112,14 @@ export default function Navbar() {
             onClick={() => setMenuOpen(!menuOpen)}
             className="md:hidden"
             style={{
-              background: 'transparent', border: '1px solid rgba(37,99,235,0.2)',
+              background: 'rgba(30,111,255,0.06)', border: '1px solid rgba(30,111,255,0.25)',
               padding: '8px', cursor: 'pointer',
               display: 'flex', flexDirection: 'column', gap: '4px',
             }}
           >
             {[0, 1, 2].map(i => (
               <span key={i} style={{
-                display: 'block', width: '18px', height: '1.5px', background: '#2563eb',
+                display: 'block', width: '18px', height: '1.5px', background: '#4d9fff',
                 transition: 'all 0.3s ease', transformOrigin: 'center',
                 transform: menuOpen
                   ? i === 0 ? 'rotate(45deg) translate(3.5px, 3.5px)'
@@ -110,9 +142,10 @@ export default function Navbar() {
             transition={{ duration: 0.2 }}
             style={{
               position: 'fixed', top: '64px', left: 0, right: 0, zIndex: 999,
-              background: '#ffffff',
-              borderBottom: '1px solid rgba(37,99,235,0.1)',
-              boxShadow: '0 8px 30px rgba(37,99,235,0.08)',
+              background: 'rgba(7,16,32,0.97)',
+              backdropFilter: 'blur(20px)',
+              borderBottom: '1px solid rgba(30,111,255,0.15)',
+              boxShadow: '0 8px 40px rgba(30,111,255,0.1)',
               padding: '2rem 5vw 2.5rem',
             }}
           >
@@ -125,13 +158,14 @@ export default function Navbar() {
               >
                 <Link to={link.path} style={{
                   display: 'block',
-                  fontFamily: 'Bebas Neue, sans-serif',
-                  fontSize: '2.5rem', fontWeight: 400,
-                  color: location.pathname === link.path ? '#2563eb' : '#0a0f2e',
+                  fontFamily: 'Orbitron, sans-serif',
+                  fontSize: '1.8rem', fontWeight: 700,
+                  color: location.pathname === link.path ? '#4d9fff' : 'rgba(232,244,255,0.8)',
                   textDecoration: 'none',
-                  padding: '0.4rem 0',
-                  borderBottom: '1px solid rgba(37,99,235,0.08)',
+                  padding: '0.6rem 0',
+                  borderBottom: '1px solid rgba(30,111,255,0.1)',
                   letterSpacing: '2px',
+                  textShadow: location.pathname === link.path ? '0 0 20px rgba(77,159,255,0.5)' : 'none',
                   transition: 'color 0.2s',
                 }}>{link.label}</Link>
               </motion.div>

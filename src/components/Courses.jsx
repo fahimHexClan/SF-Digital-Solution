@@ -2,6 +2,11 @@ import { useRef } from 'react'
 import { motion, useInView } from 'framer-motion'
 import { Link } from 'react-router-dom'
 
+const badgeColors = {
+  'Most Popular': { bg: 'rgba(30,111,255,0.2)', border: 'rgba(30,111,255,0.5)', text: '#4d9fff', glow: 'rgba(30,111,255,0.4)' },
+  'New':          { bg: 'rgba(41,121,255,0.15)', border: 'rgba(41,121,255,0.5)', text: '#818cf8', glow: 'rgba(41,121,255,0.35)' },
+}
+
 const courses = [
   {
     id: '01', title: 'Digital Marketing Mastery', subtitle: 'Foundation Course',
@@ -36,6 +41,7 @@ const courses = [
 function CourseCard({ course, index }) {
   const ref = useRef(null)
   const isInView = useInView(ref, { once: true, margin: '-60px' })
+  const bc = course.badge ? badgeColors[course.badge] : null
 
   return (
     <motion.div
@@ -43,43 +49,49 @@ function CourseCard({ course, index }) {
       initial={{ opacity: 0, y: 30 }}
       animate={isInView ? { opacity: 1, y: 0 } : {}}
       transition={{ duration: 0.5, delay: index * 0.07 }}
+      className="light-sweep-wrap"
       style={{
-        background: '#ffffff',
+        background: 'rgba(8,20,48,0.9)',
         position: 'relative',
         display: 'flex', flexDirection: 'column',
-        borderLeft: '3px solid #2563eb',
+        borderLeft: '2px solid rgba(30,111,255,0.2)',
         transition: 'all 0.3s ease',
+      }}
+      whileHover={{
+        boxShadow: '0 8px 40px rgba(30,111,255,0.15), -2px 0 0 #4d9fff',
+        borderLeftColor: '#4d9fff',
+        backgroundColor: 'rgba(13,33,71,0.95)',
       }}
     >
       {/* Top area */}
-      <div style={{ padding: '2.5rem 2rem 2rem', borderBottom: '1px solid rgba(37,99,235,0.08)', flex: 1 }}>
+      <div style={{ padding: '2.5rem 2rem 2rem', borderBottom: '1px solid rgba(30,111,255,0.08)', flex: 1 }}>
         {/* Badge + number row */}
         <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: '2rem' }}>
-          {course.badge ? (
-            <span style={{
-              fontFamily: 'Space Mono, monospace', fontSize: '9px',
+          {bc ? (
+            <span className="badge-pulse" style={{
+              fontFamily: 'Rajdhani, sans-serif', fontWeight: 700, fontSize: '10px',
               padding: '4px 12px',
-              background: course.badge === 'Most Popular' ? '#2563eb' : '#ffffff',
-              border: course.badge === 'New' ? '1px solid #2563eb' : 'none',
-              color: course.badge === 'Most Popular' ? '#ffffff' : '#2563eb',
+              background: bc.bg,
+              border: `1px solid ${bc.border}`,
+              color: bc.text,
               letterSpacing: '2px', textTransform: 'uppercase',
             }}>{course.badge}</span>
           ) : <span />}
           <span style={{
-            fontFamily: 'Space Mono, monospace', fontSize: '10px',
-            color: '#9ca3af', letterSpacing: '2px',
+            fontFamily: 'Orbitron, sans-serif', fontWeight: 700, fontSize: '11px',
+            color: 'rgba(30,111,255,0.3)', letterSpacing: '2px',
           }}>{course.id}</span>
         </div>
 
         {/* Title */}
         <h3 style={{
-          fontFamily: 'Bebas Neue, sans-serif', fontSize: '26px', fontWeight: 400,
-          letterSpacing: '1px', lineHeight: 1, color: '#0a0f2e', marginBottom: '0.4rem',
+          fontFamily: 'Orbitron, sans-serif', fontSize: '15px', fontWeight: 700,
+          letterSpacing: '1px', lineHeight: 1.3, color: '#d6eaff', marginBottom: '0.4rem',
         }}>{course.title}</h3>
 
         <p style={{
-          fontFamily: 'Space Mono, monospace', fontSize: '9px',
-          color: '#2563eb', letterSpacing: '3px', textTransform: 'uppercase',
+          fontFamily: 'Rajdhani, sans-serif', fontWeight: 600, fontSize: '10px',
+          color: '#1e6fff', letterSpacing: '3px', textTransform: 'uppercase',
           marginBottom: '2rem',
         }}>{course.subtitle}</p>
 
@@ -91,22 +103,24 @@ function CourseCard({ course, index }) {
             { label: 'Level', value: course.level },
           ].map(item => (
             <div key={item.label}>
-              <div style={{ fontFamily: 'Space Mono, monospace', fontSize: '8px', color: '#9ca3af', letterSpacing: '2px', textTransform: 'uppercase', marginBottom: '4px' }}>{item.label}</div>
-              <div style={{ fontFamily: 'Inter, sans-serif', fontWeight: 400, fontSize: '12px', color: '#4b5563' }}>{item.value}</div>
+              <div style={{ fontFamily: 'Rajdhani, sans-serif', fontWeight: 600, fontSize: '9px', color: 'rgba(107,159,212,0.35)', letterSpacing: '2px', textTransform: 'uppercase', marginBottom: '4px' }}>{item.label}</div>
+              <div style={{ fontFamily: 'Space Grotesk, sans-serif', fontWeight: 400, fontSize: '12px', color: 'rgba(107,159,212,0.8)' }}>{item.value}</div>
             </div>
           ))}
         </div>
 
         {/* Topics */}
         <div>
-          <div style={{ fontFamily: 'Space Mono, monospace', fontSize: '8px', color: '#9ca3af', letterSpacing: '2px', textTransform: 'uppercase', marginBottom: '0.75rem' }}>Topics</div>
+          <div style={{ fontFamily: 'Rajdhani, sans-serif', fontWeight: 600, fontSize: '9px', color: 'rgba(107,159,212,0.35)', letterSpacing: '2px', textTransform: 'uppercase', marginBottom: '0.75rem' }}>Topics</div>
           <div style={{ display: 'flex', flexWrap: 'wrap', gap: '6px' }}>
             {course.topics.map(topic => (
               <span key={topic} style={{
-                fontFamily: 'Space Mono, monospace', fontSize: '9px',
-                padding: '4px 10px',
-                background: '#eff6ff',
-                color: '#2563eb', letterSpacing: '1px', textTransform: 'uppercase',
+                fontFamily: 'Rajdhani, sans-serif', fontWeight: 600, fontSize: '10px',
+                padding: '3px 10px',
+                background: 'rgba(30,111,255,0.07)',
+                color: 'rgba(77,159,255,0.75)',
+                border: '1px solid rgba(30,111,255,0.18)',
+                letterSpacing: '1px', textTransform: 'uppercase',
               }}>{topic}</span>
             ))}
           </div>
@@ -117,16 +131,17 @@ function CourseCard({ course, index }) {
       <div style={{
         padding: '1.5rem 2rem',
         display: 'flex', alignItems: 'center', justifyContent: 'space-between', flexWrap: 'wrap', gap: '1rem',
-        background: '#f9fafb',
+        background: 'rgba(7,16,32,0.5)',
       }}>
         <div>
-          <div style={{ fontFamily: 'Space Mono, monospace', fontSize: '8px', color: '#9ca3af', letterSpacing: '2px', textTransform: 'uppercase', marginBottom: '4px' }}>Enrollment Fee</div>
+          <div style={{ fontFamily: 'Rajdhani, sans-serif', fontWeight: 600, fontSize: '9px', color: 'rgba(107,159,212,0.3)', letterSpacing: '2px', textTransform: 'uppercase', marginBottom: '4px' }}>Enrollment Fee</div>
           <div style={{
-            fontFamily: 'Bebas Neue, sans-serif', fontSize: '28px', fontWeight: 400,
-            letterSpacing: '1px', color: '#2563eb',
+            fontFamily: 'Orbitron, sans-serif', fontSize: '22px', fontWeight: 700,
+            letterSpacing: '1px', color: '#4d9fff',
+            textShadow: '0 0 16px rgba(77,159,255,0.5)',
           }}>{course.price}</div>
         </div>
-        <Link to="/contact" className="btn-primary-glass" style={{ fontSize: '10px', padding: '10px 20px' }}>
+        <Link to="/contact" className="btn-primary-glass" style={{ fontSize: '11px', padding: '10px 20px', minHeight: '42px' }}>
           Enroll Now
         </Link>
       </div>
@@ -140,30 +155,31 @@ export default function Courses({ limit }) {
   const displayed = limit ? courses.slice(0, limit) : courses
 
   return (
-    <section style={{ padding: '5rem 0', position: 'relative', borderBottom: '1px solid rgba(37,99,235,0.08)' }}>
+    <section style={{ padding: '4rem 0', position: 'relative', borderBottom: '1px solid rgba(30,111,255,0.08)' }}>
       <div className="max-w-7xl mx-auto">
         {/* Header */}
-        <div ref={titleRef} style={{ marginBottom: '4rem' }}>
+        <div ref={titleRef} style={{ marginBottom: '3rem' }}>
           <motion.div
             initial={{ opacity: 0 }} animate={isInView ? { opacity: 1 } : {}}
             style={{ display: 'flex', alignItems: 'center', gap: '1rem', marginBottom: '1.5rem' }}
           >
             <span className="section-number">.04</span>
-            <div style={{ width: '40px', height: '1px', background: 'rgba(37,99,235,0.2)' }} />
+            <div style={{ width: '40px', height: '1px', background: 'rgba(30,111,255,0.3)' }} />
             <span className="section-label">Learn & Grow</span>
           </motion.div>
 
           <div style={{ display: 'flex', flexWrap: 'wrap', alignItems: 'flex-end', justifyContent: 'space-between', gap: '1.5rem' }}>
             <motion.h2
               initial={{ opacity: 0, y: 28 }} animate={isInView ? { opacity: 1, y: 0 } : {}} transition={{ delay: 0.1 }}
-              style={{ fontFamily: 'Bebas Neue, sans-serif', fontSize: 'clamp(48px, 6vw, 96px)', fontWeight: 400, color: '#0a0f2e', lineHeight: 0.92, letterSpacing: '1px' }}
+              style={{ fontFamily: 'Orbitron, sans-serif', fontSize: 'clamp(36px, 5vw, 80px)', fontWeight: 900, color: '#d6eaff', lineHeight: 0.95, letterSpacing: '2px' }}
             >
-              Digital Courses<br />For Sri Lanka
+              DIGITAL COURSES<br />
+              <span style={{ WebkitTextStroke: '1.5px rgba(77,159,255,0.7)', color: 'transparent' }}>FOR SRI LANKA</span>
             </motion.h2>
             {!limit && (
               <motion.p
                 initial={{ opacity: 0 }} animate={isInView ? { opacity: 1 } : {}} transition={{ delay: 0.3 }}
-                style={{ fontFamily: 'Inter, sans-serif', fontWeight: 300, fontSize: '14px', color: '#4b5563', maxWidth: '300px', lineHeight: 1.75 }}
+                style={{ fontFamily: 'Space Grotesk, sans-serif', fontWeight: 300, fontSize: '14px', color: 'rgba(107,159,212,0.7)', maxWidth: '300px', lineHeight: 1.75 }}
               >
                 Hands-on training designed for entrepreneurs and professionals ready to master the digital landscape.
               </motion.p>

@@ -1,14 +1,18 @@
-import { useRef, useState } from 'react'
+import { useRef, useState, useEffect } from 'react'
 import { motion, useInView } from 'framer-motion'
 
 const WHATSAPP_NUMBER = '94701988102'
-const EMAIL = 'sfdigitalsolution@mail.com'
+const EMAIL = 'sfdigitalsolution1@gmail.com'
 const PHONE = '070 1988 102'
 
 export default function Contact() {
   const titleRef = useRef(null)
   const isInView = useInView(titleRef, { once: true })
   const formRef = useRef(null)
+  const [cornersIn, setCornersIn] = useState(false)
+  useEffect(() => {
+    if (isInView) { const t = setTimeout(() => setCornersIn(true), 300); return () => clearTimeout(t) }
+  }, [isInView])
 
   const [formData, setFormData] = useState({ name: '', email: '', phone: '', service: '', message: '' })
   const [status, setStatus] = useState('idle')
@@ -36,24 +40,25 @@ export default function Contact() {
   const services = ['Custom Management System', 'Web Design & SEO', 'Social Media Campaign', 'Personal Branding', 'Digital Course Enrollment', 'Other']
 
   return (
-    <section style={{ padding: '5rem 0', position: 'relative', background: '#ffffff', borderBottom: '1px solid rgba(37,99,235,0.08)' }}>
+    <section style={{ padding: '4rem 0', position: 'relative', background: 'transparent', borderBottom: '1px solid rgba(30,111,255,0.08)' }}>
       <div className="max-w-7xl mx-auto">
         {/* Header */}
-        <div ref={titleRef} style={{ marginBottom: '4rem' }}>
+        <div ref={titleRef} style={{ marginBottom: '3rem' }}>
           <motion.div
             initial={{ opacity: 0 }} animate={isInView ? { opacity: 1 } : {}}
             style={{ display: 'flex', alignItems: 'center', gap: '1rem', marginBottom: '1.5rem' }}
           >
             <span className="section-number">.05</span>
-            <div style={{ width: '40px', height: '1px', background: 'rgba(37,99,235,0.2)' }} />
+            <div style={{ width: '40px', height: '1px', background: 'rgba(30,111,255,0.3)' }} />
             <span className="section-label">Get In Touch</span>
           </motion.div>
 
           <motion.h2
             initial={{ opacity: 0, y: 28 }} animate={isInView ? { opacity: 1, y: 0 } : {}} transition={{ delay: 0.1 }}
-            style={{ fontFamily: 'Bebas Neue, sans-serif', fontSize: 'clamp(48px, 6vw, 96px)', fontWeight: 400, color: '#0a0f2e', lineHeight: 0.92, letterSpacing: '1px' }}
+            style={{ fontFamily: 'Orbitron, sans-serif', fontSize: 'clamp(36px, 5vw, 80px)', fontWeight: 900, color: '#d6eaff', lineHeight: 0.95, letterSpacing: '2px' }}
           >
-            Let's Build<br />Something Great
+            LET'S BUILD<br />
+            <span style={{ WebkitTextStroke: '1.5px rgba(77,159,255,0.7)', color: 'transparent' }}>SOMETHING GREAT</span>
           </motion.h2>
         </div>
 
@@ -62,7 +67,7 @@ export default function Contact() {
           <motion.div
             initial={{ opacity: 0, x: -30 }} animate={isInView ? { opacity: 1, x: 0 } : {}} transition={{ delay: 0.3 }}
           >
-            <p style={{ fontFamily: 'Inter, sans-serif', fontWeight: 300, fontSize: '14px', color: '#4b5563', lineHeight: 1.75, marginBottom: '3rem' }}>
+            <p style={{ fontFamily: 'Space Grotesk, sans-serif', fontWeight: 300, fontSize: '14px', color: 'rgba(107,159,212,0.7)', lineHeight: 1.75, marginBottom: '3rem' }}>
               Ready to transform your business digitally? Reach out and let's craft a tailored digital strategy that delivers real results.
             </p>
 
@@ -74,25 +79,28 @@ export default function Contact() {
             ].map(item => (
               <div key={item.label} style={{ marginBottom: '2rem', display: 'flex', gap: '1rem', alignItems: 'flex-start' }}>
                 <div style={{
-                  width: '36px', height: '36px', background: '#eff6ff',
+                  width: '38px', height: '38px',
+                  background: 'rgba(30,111,255,0.1)',
+                  border: '1px solid rgba(30,111,255,0.3)',
                   display: 'flex', alignItems: 'center', justifyContent: 'center',
-                  flexShrink: 0, color: '#2563eb', fontSize: '14px',
+                  flexShrink: 0, color: '#4d9fff', fontSize: '14px',
+                  boxShadow: '0 0 12px rgba(30,111,255,0.15)',
                 }}>◉</div>
                 <div>
-                  <div style={{ fontFamily: 'Space Mono, monospace', fontSize: '9px', color: '#2563eb', letterSpacing: '3px', textTransform: 'uppercase', marginBottom: '4px' }}>{item.label}</div>
+                  <div style={{ fontFamily: 'Rajdhani, sans-serif', fontWeight: 700, fontSize: '10px', color: '#1e6fff', letterSpacing: '3px', textTransform: 'uppercase', marginBottom: '4px' }}>{item.label}</div>
                   {item.href ? (
-                    <a href={item.href} style={{ fontFamily: 'Inter, sans-serif', fontWeight: 300, fontSize: '14px', color: '#4b5563', textDecoration: 'none', transition: 'color 0.2s' }}
-                      onMouseEnter={e => e.target.style.color = '#2563eb'}
-                      onMouseLeave={e => e.target.style.color = '#4b5563'}
+                    <a href={item.href} style={{ fontFamily: 'Space Grotesk, sans-serif', fontWeight: 300, fontSize: '14px', color: 'rgba(107,159,212,0.75)', textDecoration: 'none', transition: 'color 0.2s, text-shadow 0.2s' }}
+                      onMouseEnter={e => { e.target.style.color = '#4d9fff'; e.target.style.textShadow = '0 0 10px rgba(77,159,255,0.4)' }}
+                      onMouseLeave={e => { e.target.style.color = 'rgba(107,159,212,0.75)'; e.target.style.textShadow = 'none' }}
                     >{item.value}</a>
                   ) : (
-                    <div style={{ fontFamily: 'Inter, sans-serif', fontWeight: 300, fontSize: '14px', color: '#4b5563' }}>{item.value}</div>
+                    <div style={{ fontFamily: 'Space Grotesk, sans-serif', fontWeight: 300, fontSize: '14px', color: 'rgba(107,159,212,0.75)' }}>{item.value}</div>
                   )}
                 </div>
               </div>
             ))}
 
-            <div style={{ width: '100%', height: '1px', background: 'rgba(37,99,235,0.1)', marginBottom: '2rem' }} />
+            <div style={{ width: '100%', height: '1px', background: 'linear-gradient(90deg, rgba(30,111,255,0.3), transparent)', marginBottom: '2rem' }} />
 
             {/* WhatsApp button */}
             <button
@@ -111,12 +119,29 @@ export default function Contact() {
           <motion.div
             initial={{ opacity: 0, x: 30 }} animate={isInView ? { opacity: 1, x: 0 } : {}} transition={{ delay: 0.4 }}
             style={{
-              background: '#ffffff',
-              border: '1px solid rgba(37,99,235,0.1)',
+              background: 'rgba(13,33,71,0.8)',
+              border: '1px solid rgba(30,111,255,0.2)',
               padding: '2.5rem',
-              boxShadow: '0 4px 24px rgba(37,99,235,0.06)',
+              backdropFilter: 'blur(20px)',
+              position: 'relative',
             }}
           >
+            {/* Corner accent lines — animated in */}
+            {[
+              { top: 0, left: 0,  width: cornersIn ? '30px' : '0px', height: '2px' },
+              { top: 0, left: 0,  width: '2px', height: cornersIn ? '30px' : '0px' },
+              { bottom: 0, right: 0, width: cornersIn ? '30px' : '0px', height: '2px' },
+              { bottom: 0, right: 0, width: '2px', height: cornersIn ? '30px' : '0px' },
+            ].map((s, i) => (
+              <div key={i} style={{
+                position: 'absolute', background: '#1e6fff',
+                boxShadow: '0 0 8px rgba(30,111,255,0.6)',
+                transition: 'width 0.4s ease, height 0.4s ease',
+                transitionDelay: `${i * 0.06}s`,
+                ...s,
+              }} />
+            ))}
+
             <form ref={formRef} onSubmit={handleSubmit}>
               <div className="form-row-2" style={{ marginBottom: '1px' }}>
                 <input className="form-input" type="text" name="name" placeholder="Your Name *" value={formData.name} onChange={handleChange} required />
@@ -144,10 +169,11 @@ export default function Contact() {
                   initial={{ opacity: 0, y: -10 }} animate={{ opacity: 1, y: 0 }}
                   style={{
                     padding: '1rem',
-                    background: '#eff6ff',
-                    border: '1px solid rgba(37,99,235,0.2)',
-                    fontFamily: 'Space Mono, monospace', fontSize: '10px',
-                    color: '#2563eb', letterSpacing: '1px', marginBottom: '1px',
+                    background: 'rgba(30,111,255,0.12)',
+                    border: '1px solid rgba(30,111,255,0.35)',
+                    fontFamily: 'Rajdhani, sans-serif', fontWeight: 700, fontSize: '11px',
+                    color: '#4d9fff', letterSpacing: '2px', marginBottom: '1rem',
+                    textTransform: 'uppercase',
                   }}
                 >
                   MESSAGE SENT — We'll respond within 24 hours.
@@ -158,9 +184,22 @@ export default function Contact() {
                 type="submit"
                 disabled={status === 'sending'}
                 className="btn-primary-glass"
-                style={{ width: '100%', justifyContent: 'center', opacity: status === 'sending' ? 0.7 : 1 }}
+                style={{
+                  width: '100%', justifyContent: 'center',
+                  opacity: status === 'sending' ? 0.75 : 1,
+                  background: status === 'success'
+                    ? 'linear-gradient(135deg, #0a6638, #0f9b52)'
+                    : undefined,
+                  boxShadow: status === 'success'
+                    ? '0 0 20px rgba(15,155,82,0.5)'
+                    : undefined,
+                  transition: 'all 0.4s ease',
+                }}
               >
-                {status === 'sending' ? 'Sending...' : 'Send Message →'}
+                {status === 'sending' && (
+                  <span style={{ display: 'inline-block', width: '14px', height: '14px', border: '2px solid rgba(255,255,255,0.3)', borderTopColor: '#fff', borderRadius: '50%', animation: 'spin 0.7s linear infinite', marginRight: '8px' }} />
+                )}
+                {status === 'success' ? '✓ Message Sent!' : status === 'sending' ? 'Sending...' : 'Send Message →'}
               </button>
             </form>
           </motion.div>
